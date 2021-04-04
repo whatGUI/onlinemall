@@ -1,4 +1,5 @@
-# onlinemall
+# online-mall
+一个使用Vue编写的移动端商城项目
 
 ## Project setup
 ```
