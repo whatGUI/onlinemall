@@ -16,10 +16,9 @@
       <goods-list ref="recommend" :goods="recommend" />
     </scroll>
 
-    <detail-bottom-bar @addCart="addToCart" />
+    <detail-bottom-bar :iid="iid" @addCart="addToCart" />
 
     <back-top @click.native="backClick" v-show="isShowBackTop" />
-
   </div>
 </template>
 
@@ -92,12 +91,16 @@ export default {
       // this.themeTopYs.push(Number.MAX_VALUE);
     },
     titleClick(index) {
-      this.$refs.scroll.scrollTo(0, this.$refs.nav.$el.offsetHeight - this.themeTopYs[index], 100);
+      this.$refs.scroll.scrollTo(
+        0,
+        this.$refs.nav.$el.offsetHeight - this.themeTopYs[index],
+        100
+      );
     },
     contentScroll(position) {
-      this.isShowBackTop = this.$refs.nav.$el.offsetHeight  - position.y > 1000;
+      this.isShowBackTop = this.$refs.nav.$el.offsetHeight - position.y > 1000;
 
-      const positionY = this.$refs.nav.$el.offsetHeight  - position.y;
+      const positionY = this.$refs.nav.$el.offsetHeight - position.y;
       const topY = this.themeTopYs;
       // const length = topY.length;
 
@@ -176,7 +179,7 @@ export default {
       this.$refs.scroll.scrollTo(0, 0, 500);
     },
 
-    ...mapActions(["addCart"]),
+    ...mapActions(["addCart", "updateCartList"]),
     addToCart() {
       const product = {};
       product.image = this.topImages[0];
@@ -187,6 +190,9 @@ export default {
 
       this.addCart(product).then((res) => {
         this.$toast.show(res);
+        if (this.$auth.isAuthenticated === true) {
+          this.updateCartList();
+        }
       });
     },
   },

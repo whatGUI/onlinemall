@@ -29,16 +29,15 @@ export default {
     };
   },
   methods: {
-    scrollTo(x,y,time=300){
-      this.scroll?.scrollTo(x,y,time)
+    scrollTo(x, y, time = 300) {
+      this.scroll?.scrollTo(x, y, time);
     },
     refresh() {
-      // console.log('图片刷新完成')
-      this.scroll?.refresh()
+      this.scroll?.refresh();
     },
-    finishPullUp(){
-      this.scroll?.finishPullUp()
-    }
+    finishPullUp() {
+      this.scroll?.finishPullUp();
+    },
   },
   mounted() {
     this.scroll = new BScroll(this.$refs.wrapper, {

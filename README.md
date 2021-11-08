@@ -1,7 +1,6 @@
 # online-mall
 一个使用Vue编写的移动端商城项目
 
-演示地址：[onlinemall-whatgui.vercel.app](https://onlinemall-whatgui.vercel.app/)
 ## Project setup
 ```
 npm install

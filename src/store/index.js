@@ -8,7 +8,15 @@ import getters from './getters.js';
 Vue.use(Vuex)
 
 const state = {
-  cartList:[],
+  cartList: [],
+  profile: {
+    balance: 0.00,
+    coupon: 0,
+    points: 0,
+    favorites: [],
+    userId: '',
+    userEmail: ''
+  },
 }
 
 export default new Vuex.Store({

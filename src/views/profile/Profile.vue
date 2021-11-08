@@ -4,16 +4,26 @@
       <template #center>我的</template>
     </nav-bar>
 
-    <div class="user-info" @click="userClick">
-      <img src="~assets/img/profile/avatar.svg" alt="" class="avatar" />
-      <div class="info">
-        <div>登录/注册</div>
-        <div>
-          <img src="~assets/img/profile/phone.svg" alt="" /><span
-            >暂无绑定手机号</span
-          >
+    <div class="user-info">
+      <div v-if="$auth.isAuthenticated">
+        <img src="~assets/img/profile/avatar.svg" alt="" class="avatar" />
+        <div class="info">
+          <div>Hi~ {{ $auth.user.nickname }}</div>
         </div>
       </div>
+
+      <div v-else>
+        <img src="~assets/img/profile/avatar.svg" alt="" class="avatar" />
+        <div class="info" @click="login">
+          <div>登录/注册</div>
+          <div>
+            <img src="~assets/img/profile/phone.svg" alt="" /><span
+              >暂无绑定手机号</span
+            >
+          </div>
+        </div>
+      </div>
+
       <div class="arrow">
         <img src="~assets/img/common/arrow-left.svg" alt="" />
       </div>
@@ -21,15 +31,24 @@
 
     <div class="account">
       <div class="account-item">
-        <div class="number"><span>0.00</span>元</div>
+        <div class="number">
+          <span>{{ getBalance }}</span
+          >元
+        </div>
         <div class="label">我的余额</div>
       </div>
       <div class="account-item">
-        <div class="number"><span>0</span>个</div>
+        <div class="number">
+          <span>{{ getCoupon }}</span
+          >个
+        </div>
         <div class="label">我的优惠</div>
       </div>
       <div class="account-item">
-        <div class="number"><span>0</span>分</div>
+        <div class="number">
+          <span>{{ getPoints }}</span
+          >分
+        </div>
         <div class="label">我的积分</div>
       </div>
     </div>
@@ -50,13 +69,21 @@
     </div>
 
     <div class="list">
-      <div class="list-item">
-        <img src="~assets/img/profile/cart.svg" alt="" />
-        <div>我的购物车</div>
-      </div>
+      <router-link to="/cart">
+        <div class="list-item">
+          <img src="~assets/img/profile/cart.svg" alt="" />
+          <div>我的购物车</div>
+        </div>
+      </router-link>
       <div class="list-item">
         <img src="~assets/img/profile/shopping.svg" alt="" />
         <div>下载购物APP</div>
+      </div>
+      <div>
+        <div class="list-item" v-if="$auth.isAuthenticated" @click="logout">
+          <img src="~assets/img/profile/logout.svg" alt="" />
+          <div>退出登录</div>
+        </div>
       </div>
     </div>
   </div>
@@ -64,12 +91,24 @@
 
 <script>
 import NavBar from "../../components/common/navbar/NavBar.vue";
+import { mapGetters } from "vuex";
+
 export default {
   name: "Profile",
   components: { NavBar },
+  computed: {
+    ...mapGetters(["getBalance", "getCoupon", "getPoints"]),
+  },
   methods: {
-    userClick() {
-      this.$toast.show("网络故障：服务器无响应");
+    // Log the user in
+    login() {
+      this.$auth.loginWithRedirect();
+    },
+    // Log the user out
+    logout() {
+      this.$auth.logout({
+        returnTo: window.location.origin,
+      });
     },
   },
 };
@@ -84,6 +123,10 @@ export default {
   display: flex;
   padding: 6px 15px;
   background-color: var(--color-tint);
+  justify-content: space-between;
+}
+.user-info > div {
+  display: flex;
 }
 .avatar {
   width: 70px;
@@ -127,7 +170,6 @@ export default {
 .account-item span {
   color: var(--color-high-text);
   font-size: 24px;
-
 }
 .account-item .label {
   margin-top: 5px;

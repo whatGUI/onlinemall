@@ -9,7 +9,7 @@
         <i class="icon shop"></i>
         <span class="text">店铺</span>
       </div>
-      <div @click="isActive = !isActive">
+      <div @click="favBtnClick">
         <i class="icon select" :class="{ active: isActive }"></i>
         <span class="text">收藏</span>
       </div>
@@ -22,17 +22,44 @@
 </template>
 
 <script>
+import { debounce } from "@/common/utils.js";
+import { mapActions, mapMutations } from "vuex";
+
 export default {
   name: "DetailBottomBar",
+  props: ["iid"],
   data() {
     return {
       isActive: false,
     };
   },
   methods: {
+    ...mapActions(["updateFavoritesList"]),
+    ...mapMutations(["addFavorites", "removeFavorites"]),
     addCart() {
       this.$emit("addCart");
     },
+    favBtnClick() {
+      if (this.isActive) {
+        this.removeFavorites(this.iid);
+      } else {
+        this.addFavorites(this.iid);
+      }
+      if (this.$auth.isAuthenticated) {
+        const updateFav = debounce(this.updateFavoritesList, 100);
+        updateFav();
+      }
+      this.isActive = !this.isActive;
+    },
+    isInFav() {
+      const { favorites } = this.$store.state.profile;
+      if (favorites?.includes(this.iid)) {
+        this.isActive = true;
+      }
+    },
+  },
+  mounted() {
+    this.isInFav();
   },
 };
 </script>
