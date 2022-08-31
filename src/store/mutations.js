@@ -16,7 +16,7 @@ export default {
     data.balance = payload.balance.substring(1)
     data.coupon = payload.coupon
     data.points = payload.points
-    data.favorites = payload.favorites[0] || []
+    data.favorites = payload.favorites?.[0] || []
     data.userEmail = payload.useremail
     data.userId = payload.userid
     state.profile = { ...data }
