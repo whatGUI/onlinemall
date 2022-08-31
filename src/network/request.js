@@ -1,9 +1,10 @@
 import axios from "axios";
 
+let mainURL = process.env.VUE_APP_MAIN_URL;
 let baseURL = process.env.VUE_APP_API_URL;
 
 export function autoSwitchBaseURL() {
-  if (document.location.origin !== baseURL) {
+  if (document.location.origin !== mainURL) {
     baseURL = process.env.VUE_APP_API_URL_RESERVE;
   }
 }
